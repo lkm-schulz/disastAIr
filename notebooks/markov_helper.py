@@ -2,7 +2,7 @@ from collections import defaultdict
 from multiprocessing import Value
 import time
 
-def count_ngrams(sequences: list[list], n, progress) -> tuple[int, dict[tuple, int]]:
+def count_ngrams(sequences: list, n, progress) -> tuple[int, dict[tuple, int]]:
     total = 0
     frequencies = defaultdict(int)
     
