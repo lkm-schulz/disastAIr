@@ -5,6 +5,7 @@ import multiprocessing as mp
 import decimal
 import os
 from .settings import DEF_SMOOTHING_WEIGHT, DEF_VOCAB_SIZE, MULTITHREAD_NUM_WORKERS
+from .helpers import move_and_clear_line, print_over
 
 class Model:
     order: int
@@ -34,14 +35,23 @@ class Model:
             else:
                 raise TypeError(f'sequences argument must be either a list of strings or list of lists (is list[{type(sequences[0])}]).')
 
+            if verbose:
+                print()
+
             start = time.time()
 
             if (multithread):
+                if verbose:
+                    print_over(f'Allocating resources for {MULTITHREAD_NUM_WORKERS} workers...')
                 manager = mp.Manager()
                 pool = mp.Pool(processes=MULTITHREAD_NUM_WORKERS)
 
                 processes = [None] * (order + 1)  
                 progresses = [None] * (order + 1)
+
+                if verbose:
+                    move_and_clear_line()
+                    print(f'Launching tasks for worker processes...')
 
                 try:
                     for n in range(order + 1):
@@ -67,8 +77,8 @@ class Model:
                 i = 0
                 for seq in sequences:
                     i += 1
-                    if i % 10 == 0:
-                        print(f'Counting NGrams for Markov Model: {(i / len(sequences) * 100):>5.2f}%', end='\r')
+                    if verbose and i % 10 == 0:
+                        print_over(f'Counting NGrams for Markov Model: {(i / len(sequences) * 100):>5.2f}%')
                     for n in range(0, order + 1):
                         for pos in range(len(seq) - n):
                             ngram = seq[pos:pos+n+1]
@@ -76,7 +86,7 @@ class Model:
 
             duration = time.time() - start
             if verbose:
-                print(f'Order {order} Markov Model of {len(sequences)} sequences built in {duration:.3f} seconds!')
+                print_over(f'Order {order} Markov Model of {len(sequences)} sequences built in {duration:.3f} seconds!')
 
     def __str__(self):
         return f'{self.order}-Order Markov NGram Object - Totals: {self.totals}'
@@ -123,7 +133,7 @@ class Model:
         while True:
             completed = sum(progresses[i].value for i in range(num_workers))
             progress = completed / (num_sequences * num_workers) * 100
-            print(f'Counting NGrams for Markov Model: {progress:>5.2f}%', end='\r')
+            print_over(f'Counting NGrams for Markov Model: {progress:>5.2f}%')
 
             if completed >= num_sequences * num_workers:
                 print
