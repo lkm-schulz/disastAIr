@@ -28,7 +28,17 @@ class Classifier:
 
         self.model_pos = Model(order, positives, multithread=multithread, verbose=verbose, vocab_size=vocab_size, smoothing_weight=smoothing_weight)
         self.model_neg = Model(order, negatives, multithread=multithread, verbose=verbose, vocab_size=vocab_size, smoothing_weight=smoothing_weight)
+        prior_pos = len(positives) / (len(positives) + len(negatives))
+        self.__log_prior_pos__ = math.log(prior_pos)
+        self.__log_prior_neg__ = math.log(1 - prior_pos)
         self.order = order
+
+        if verbose:
+            print(f'Classifier trained: {len(positives)} positive, {len(negatives)} negative, {prior_pos * 100:.2f}% positive prior probability.\n(Hint: the prior probability can be modified with the set_prior() method.)')
+
+    def set_prior(self, prior: float):
+        self.__log_prior_pos__ = math.log(prior)
+        self.__log_prior_neg__ = math.log(1 - prior)
 
     def classify(self, seq) -> bool:
         return self.model_pos.get_log_sum_prob(seq) + self.__log_prior_neg__ > self.model_neg.get_log_sum_prob(seq) + self.__log_prior_neg__
