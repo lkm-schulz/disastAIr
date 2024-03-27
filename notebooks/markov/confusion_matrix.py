@@ -28,17 +28,19 @@ class ConfusionMatrix:
     def get_recall(self):
         return self.tp / (self.tp + self.fn) if self.tp > 0 else 0
 
-    def add(self, rhs: 'ConfusionMatrix'):
-        self.tp += rhs.tp
-        self.fp += rhs.fp
-        self.tn += rhs.tn
-        self.fn += rhs.fn
+    def add(self, rhs: 'ConfusionMatrix') -> 'ConfusionMatrix':
+        tp = self.tp + rhs.tp
+        fp = self.fp + rhs.fp
+        tn = self.tn + rhs.tn
+        fn = self.fn + rhs.fn
+        return ConfusionMatrix(tp=tp, fp=fp, tn=tn, fn=fn)
 
-    def div(self, divisor):
-        self.tp /= divisor
-        self.fp /= divisor
-        self.tn /= divisor
-        self.fn /= divisor
+    def div(self, divisor) -> 'ConfusionMatrix':
+        tp = self.tp / divisor
+        fp = self.fp / divisor
+        tn = self.tn / divisor
+        fn = self.fn / divisor
+        return ConfusionMatrix(tp=tp, fp=fp, tn=tn, fn=fn)
 
     def get_display(self, cmap=plt.cm.Blues, display_labels=["Positive", "Negative"]):
         actual = ([1] * round(self.tp)) + ([0] * round(self.fp)) + ([0] * round(self.tn)) + ([1] * round(self.fn))
