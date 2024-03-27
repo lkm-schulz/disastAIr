@@ -18,13 +18,15 @@ class ConfusionMatrix:
         return f'Total: {total:.1f}, TP: {self.tp:.1f}, TN: {self.tn:.1f}, FP: {self.fp:.1f}, FN: {self.fn:.1f}, Prc: {self.get_precision():.3f}, Rec. {self.get_recall():.3f}, F1: {self.get_f1():.3f}'
     
     def get_f1(self):
-        return 2 * ((self.get_precision() * self.get_recall()) / (self.get_precision() + self.get_recall()))
+        prec = self.get_precision()
+        rec = self.get_recall()
+        return (2 * ((prec * rec) / (prec + rec))) if prec + rec > 0 else 0
     
     def get_precision(self):
-        return self.tp / (self.tp + self.fp)
+        return self.tp / (self.tp + self.fp) if self.tp > 0 else 0
 
     def get_recall(self):
-        return self.tp / (self.tp + self.fn) 
+        return self.tp / (self.tp + self.fn) if self.tp > 0 else 0
 
     def add(self, rhs: 'ConfusionMatrix'):
         self.tp += rhs.tp
