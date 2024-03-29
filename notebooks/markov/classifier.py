@@ -59,7 +59,7 @@ class Classifier:
             self.reset_prior()
 
     def classify(self, seq) -> bool:
-        return self.model_pos.get_log_sum_prob(seq) + self.__log_prior_neg__ > self.model_neg.get_log_sum_prob(seq) + self.__log_prior_neg__
+        return self.model_pos.get_log_sum_prob(seq) + self.__log_prior_pos__ > self.model_neg.get_log_sum_prob(seq) + self.__log_prior_neg__
 
     def eval(self, instances: list, labels: list) -> ConfusionMatrix:
 
