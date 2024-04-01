@@ -31,13 +31,14 @@ class ConfusionMatrix:
     def get_accuracy(self):
         return (self.tp + self.tn) / (self.tp + self.tn + self.fp + self.fn)
 
+    def __add__(self, rhs: 'ConfusionMatrix') -> 'ConfusionMatrix':
         tp = self.tp + rhs.tp
         fp = self.fp + rhs.fp
         tn = self.tn + rhs.tn
         fn = self.fn + rhs.fn
         return ConfusionMatrix(tp=tp, fp=fp, tn=tn, fn=fn)
 
-    def div(self, divisor) -> 'ConfusionMatrix':
+    def __truediv__(self, divisor) -> 'ConfusionMatrix':
         tp = self.tp / divisor
         fp = self.fp / divisor
         tn = self.tn / divisor
