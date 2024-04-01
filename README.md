@@ -11,7 +11,7 @@ The models used are:
 
 Python is used for all models and experiments. The DL model is used through the `KerasNLP` library, while the Markov classifier is implemented fully from scratch.
 
-A full project description, including results and a discussion, is given in the project report.
+A full project description, including results and a discussion, is given in the [project report](Report.pdf).
 
 ## Authors
 | Name | Profile |
