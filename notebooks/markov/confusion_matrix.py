@@ -15,7 +15,7 @@ class ConfusionMatrix:
 
     def __str__(self):
         total = self.tp + self.fp + self.tn + self.fn
-        return f'Total: {total:.1f}, TP: {self.tp:.1f}, TN: {self.tn:.1f}, FP: {self.fp:.1f}, FN: {self.fn:.1f}, Prc: {self.get_precision():.3f}, Rec. {self.get_recall():.3f}, F1: {self.get_f1():.3f}'
+        return f'Total: {total:.1f}, TP: {self.tp:.1f}, TN: {self.tn:.1f}, FP: {self.fp:.1f}, FN: {self.fn:.1f}, Acc: {self.get_accuracy():.3f}, Prc: {self.get_precision():.3f}, Rec: {self.get_recall():.3f}, F1: {self.get_f1():.3f}'
     
     def get_f1(self):
         prec = self.get_precision()
@@ -27,8 +27,10 @@ class ConfusionMatrix:
 
     def get_recall(self):
         return self.tp / (self.tp + self.fn) if self.tp > 0 else 0
+    
+    def get_accuracy(self):
+        return (self.tp + self.tn) / (self.tp + self.tn + self.fp + self.fn)
 
-    def add(self, rhs: 'ConfusionMatrix') -> 'ConfusionMatrix':
         tp = self.tp + rhs.tp
         fp = self.fp + rhs.fp
         tn = self.tn + rhs.tn
