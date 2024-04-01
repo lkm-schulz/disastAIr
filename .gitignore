@@ -3,3 +3,4 @@
 data/submission.csv
 data/figures/*
 !data/figures/.gitkeep
+**/.venv
